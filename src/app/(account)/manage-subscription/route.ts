@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   // 1. Get the user from session
-  const { session } = await getSession();
+  const session = await getSession();
 
   if (!session || !session.user.id) {
     throw Error('Could not get userId');
