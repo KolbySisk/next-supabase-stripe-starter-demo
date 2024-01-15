@@ -1,18 +1,13 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import { getSession } from '@/features/account/controllers/get-session';
 import { getSubscription } from '@/features/account/controllers/get-subscription';
 import { PricingCard } from '@/features/pricing/components/price-card';
 import { getProducts } from '@/features/pricing/controllers/get-products';
 import { Price, ProductWithPrices } from '@/features/pricing/types';
-import { Database } from '@/libs/supabase/types';
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 
 export default async function AccountPage() {
   const [session, subscription, products] = await Promise.all([getSession(), getSubscription(), getProducts()]);
@@ -34,20 +29,6 @@ export default async function AccountPage() {
       }
     }
   }
-
-  const updateEmail = async (formData: FormData) => {
-    'use server';
-
-    const newEmail = formData.get('email') as string;
-    const supabase = createServerActionClient<Database>({ cookies });
-    const { error } = await supabase.auth.updateUser({ email: newEmail });
-    if (error) {
-      console.error(error);
-    }
-    toast({
-      description: `Verify your email by clicking the link in the email sent to: ${newEmail}`,
-    });
-  };
 
   return (
     <section className='rounded-lg bg-black px-4 py-16'>
@@ -73,26 +54,6 @@ export default async function AccountPage() {
           ) : (
             <p>You don&apos;t have an active subscription</p>
           )}
-        </Card>
-
-        <Card
-          title='Your Email'
-          footer={
-            <Button size='sm' variant='secondary' type='submit' form='emailForm'>
-              Update Email
-            </Button>
-          }
-        >
-          <form id='emailForm' action={updateEmail}>
-            <Input
-              type='text'
-              name='email'
-              className='m-auto w-full rounded-md lg:w-1/2'
-              defaultValue={session.user.email}
-              placeholder='Your email'
-              maxLength={64}
-            />
-          </form>
         </Card>
       </div>
     </section>
