@@ -9,5 +9,5 @@ export async function getSession() {
     console.error(error);
   }
 
-  return data;
+  return data.session;
 }
