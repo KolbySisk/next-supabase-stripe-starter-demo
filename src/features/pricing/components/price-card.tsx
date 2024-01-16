@@ -56,7 +56,7 @@ export function PricingCard({
   }
 
   return (
-    <WithSexyBorder variant={metadata.priceCardVariant} className='flex-1'>
+    <WithSexyBorder variant={metadata.priceCardVariant} className='w-full flex-1'>
       <div className='flex w-full flex-col rounded-md border border-zinc-800 bg-black p-4 lg:p-8'>
         <div className='p-4'>
           <div className='mb-1 text-center font-alt text-xl font-bold'>{product.name}</div>
